@@ -2,7 +2,6 @@ import os
 import requests
 import random
 import string
-import subprocess
 import re
 import urllib.parse
 import argparse
