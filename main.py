@@ -19,16 +19,24 @@ def parse_args():
         '--url', type=str, help='URL of the video')
     parser.add_argument('--output_dir', default=os.path.join(
         os.getcwd(), 'xvideos_output'), type=str, help='Output directory')
-    parser.add_argument('--output_filename', default=generate_random_filename(
-    ), type=str, help='Output filename')
-    # parser.add_argument('playlist_url', type=str, help='URL of the playlist')
+    parser.add_argument('--output_filename', type=str, help='Output filename')
     parser.add_argument('--silent', action='store_true',
                         help='Disable progress bar')
     parser.add_argument('--ffmpeg_path', type=str,
                         default='ffmpeg', help='Path to ffmpeg')
     parser.add_argument('--quality_mode', choices=[
                         'best', 'prompt', 'worst'], help='Quality mode', default='best')
+    parser.add_argument('--cleanup', action='store_false',
+                        help='remove segment files after download')
     return parser.parse_args()
+
+
+def get_title_from_request(req):
+    title_regex = re.compile(r'<title>(.*?)</title>', re.IGNORECASE)
+    match = title_regex.search(req.text)
+    if match:
+        return match.group(1) + '.mp4'
+    return None
 
 
 def get_fractions_from_playlist_and_download(playlist_url, args):
@@ -66,8 +74,6 @@ def get_fractions_from_playlist_and_download(playlist_url, args):
     subprocess.run(['ffmpeg', '-f', 'concat', '-safe', '0', '-i',
                     filelist_path, '-c', 'copy', output_filepath])
 
-# Generate a random output filename
-
 
 def get_playlist_from_page(page_url):
     req = requests.get(page_url)
@@ -86,7 +92,10 @@ def get_playlist_from_page(page_url):
             if match:
                 m = match.group(0)
                 qualities[int(m)] = line
-    return qualities, cdn_url
+    title = get_title_from_request(req)
+    if not title:
+        title = generate_random_filename()
+    return qualities, cdn_url, get_title_from_request(req)
 
 
 def select_quality(qualities, quality_mode):
@@ -103,10 +112,17 @@ def select_quality(qualities, quality_mode):
 
 def main():
     args = parse_args()
-    qualities, cdn_url = get_playlist_from_page(args.url)
+    qualities, cdn_url, title = get_playlist_from_page(args.url)
+    if not args.output_filename:
+        args.output_filename = title + '.mp4'
     qual = select_quality(qualities, args.quality_mode)
     get_fractions_from_playlist_and_download(
         urllib.parse.urljoin(cdn_url, qual), args)
+
+    if args.cleanup:
+        for filename in os.listdir(args.output_dir):
+            if filename.endswith('.ts'):
+                os.remove(os.path.join(args.output_dir, filename))
 
 
 if __name__ == '__main__':
