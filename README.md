@@ -1,4 +1,4 @@
-# Project Name
+# Xvideos Downloader
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -17,18 +17,24 @@ This project is a Python script can download video files from xvideo page urls, 
 
 1. Clone the repository:
 
-   ```shell
-   git clone https://github.com/your-username/project-name.git
+```shell
+git clone https://github.com/your-username/project-name.git
+```
 
 2. Navigate to the project directory:
 
-    ```shell
-    cd project-name
+```shell
+cd project-name
+```
 
 3. Install the required dependencies:
-    ```shell
-    pip install -r requirements.txt
+
+```shell
+pip install -r requirements.txt
+```
 
 ## Usage
-    ```shell
-    python main.py --url https://www.xvideos.com/video.udmiuhfe418/fooooo --output_dir YOUR_OUTPUT_DIR --output_filename FILENAME.MP4 --quality_mode best
+
+```shell
+python main.py --url https://www.xvideos.com/video.udmiuhfe418/fooooo --output_dir YOUR_OUTPUT_DIR --output_filename FILENAME.MP4 --quality_mode best
+```
