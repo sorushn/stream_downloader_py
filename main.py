@@ -25,7 +25,7 @@ def parse_args():
     parser.add_argument('--ffmpeg_path', type=str,
                         default='ffmpeg', help='Path to ffmpeg')
     parser.add_argument('--quality_mode', choices=[
-                        'best', 'prompt', 'worst'], help='Quality mode', default='best')
+                        'best', 'prompt', 'worst'], help='Quality mode, best for best available quality, prompt for manual selection, worst for worst available quality', default='best')
     parser.add_argument('--cleanup', action='store_false',
                         help='remove segment files after download')
     return parser.parse_args()
