@@ -152,7 +152,8 @@ def select_quality(qualities, quality_mode):
     Returns:
         The selected quality based on the given quality mode.
     """
-    return qualities[max(qualities)]
+    if quality_mode == 'best':
+        return qualities[max(qualities)]
     elif quality_mode == 'prompt':
         print('Available qualities:')
         for quality in qualities:
