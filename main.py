@@ -182,6 +182,7 @@ def main():
         for filename in os.listdir(args.output_dir):
             if filename.endswith('.ts'):
                 os.remove(os.path.join(args.output_dir, filename))
+        os.remove(os.path.join(args.output_dir, 'filelist.txt'))
 
 
 if __name__ == '__main__':
