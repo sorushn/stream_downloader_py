@@ -4,7 +4,7 @@
 
 ## Description
 
-This project is a Python script can download video files from xvideo page urls, with the option to select download quality.
+This project is a Python script can download video files from xvideos page urls, with the option to select download quality.
 
 ## Prerequisites
 
