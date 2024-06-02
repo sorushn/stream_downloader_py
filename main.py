@@ -6,6 +6,7 @@ import re
 import urllib.parse
 import argparse
 from tqdm import tqdm
+import subprocess
 
 
 def parse_args():
@@ -67,7 +68,8 @@ def get_fractions_from_playlist_and_download(playlist_url, args):
     output_filepath = os.path.join(args.output_dir, args.output_filename)
     # Create the download directory if it does not exist
     os.makedirs(args.output_dir, exist_ok=True)
-
+    print(playlist_url)
+    prefix = playlist_url.replace(playlist_url.split('/')[-1], '')
     # request the playlist file
     response = requests.get(playlist_url)
     # Read the playlist
@@ -83,6 +85,9 @@ def get_fractions_from_playlist_and_download(playlist_url, args):
 
             # Download the segment
             segment_response = requests.get(segment_url)
+            if os.path.exists(segment_path):
+                print(segment_path)
+                continue
             with open(segment_path, 'wb') as segment_file:
                 segment_file.write(segment_response.content)
 
@@ -119,6 +124,7 @@ def get_playlist_from_page(page_url):
         - The function then calls get_title_from_request to retrieve the title of the playlist.
         - If no title is found, a random filename is generated using the generate_random_filename function.
     """
+    req = requests.get(page_url)
     url_regex = re.compile(r'(https?://[^ ]+m3u8)', re.IGNORECASE)
     match = url_regex.search(req.text)
     if match:
@@ -168,6 +174,7 @@ def main():
     if not args.output_filename:
         args.output_filename = title + '.mp4'
     qual = select_quality(qualities, args.quality_mode)
+    print(cdn_url)
     get_fractions_from_playlist_and_download(
         urllib.parse.urljoin(cdn_url, qual), args)
 
