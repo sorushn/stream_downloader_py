@@ -68,7 +68,6 @@ def get_fractions_from_playlist_and_download(playlist_url, args):
     output_filepath = os.path.join(args.output_dir, args.output_filename)
     # Create the download directory if it does not exist
     os.makedirs(args.output_dir, exist_ok=True)
-    print(playlist_url)
     prefix = playlist_url.replace(playlist_url.split('/')[-1], '')
     # request the playlist file
     response = requests.get(playlist_url)
@@ -174,7 +173,6 @@ def main():
     if not args.output_filename:
         args.output_filename = title + '.mp4'
     qual = select_quality(qualities, args.quality_mode)
-    print(cdn_url)
     get_fractions_from_playlist_and_download(
         urllib.parse.urljoin(cdn_url, qual), args)
 
